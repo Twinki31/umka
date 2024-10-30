@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure--r3rrczzwk*-ws*buq!38q@kexwxx9u(urf6()e9nx%@hyxs@h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'myapp',
 ]
 
@@ -78,11 +79,11 @@ WSGI_APPLICATION = 'umka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # Имя вашей базы данных
-        'USER': 'postgres',      # Имя пользователя
-        'PASSWORD': '12345',  # Пароль
+        'NAME': 'postgres', # Имя вашей базы данных
+        'USER': 'postgres', # Имя пользователя
+        'PASSWORD': '12345', # Пароль
         'HOST': 'localhost',
-        'PORT': '5432',             # Обычно оставьте пустым для стандартного порта 5432
+        'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
     }
 }
 
@@ -109,9 +110,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
