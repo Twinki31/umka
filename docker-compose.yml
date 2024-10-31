@@ -4,13 +4,26 @@ services:
     container_name: db_postgres
     restart: always
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: main
+      POSTGRES_USER: jack
+      POSTGRES_PASSWORD: 12345
     ports:
       - "5432:5432"
     volumes:
       - ./db/postgres:/var/lib/postgresql/data
+    networks:
+      - main_network
+
+  backend_api:
+    build: .
+    container_name: backend_api
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+    depends_on:
+      - db_postgres
     networks:
       - main_network
 

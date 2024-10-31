@@ -79,8 +79,8 @@ WSGI_APPLICATION = 'umka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres', # Имя вашей базы данных
-        'USER': 'postgres', # Имя пользователя
+        'NAME': 'main', # Имя вашей базы данных
+        'USER': 'jack', # Имя пользователя
         'PASSWORD': '12345', # Пароль
         'HOST': 'localhost',
         'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
