@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'drf_yasg',
     'myapp',
 ]
 
@@ -79,10 +80,10 @@ WSGI_APPLICATION = 'umka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'main', # Имя вашей базы данных
-        'USER': 'jack', # Имя пользователя
+        'NAME': 'postgres', # Имя вашей базы данных
+        'USER': 'postgres', # Имя пользователя
         'PASSWORD': '12345', # Пароль
-        'HOST': 'db_postgres',
+        'HOST': 'localhost',
         'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
     }
 }
