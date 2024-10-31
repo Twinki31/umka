@@ -11,5 +11,7 @@ COPY . /app
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
+EXPOSE 8000
+
 # Указываем команду для запуска приложения
-CMD ["python", "manage.py", "runserver"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
