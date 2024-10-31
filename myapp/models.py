@@ -12,7 +12,7 @@ class User(models.Model):
     meeting_count = models.IntegerField(_('Количество встреч'), default=0)
     last_meeting_date = models.DateTimeField(_('Дата последней встречи'), null=True, blank=True)
     last_balance_update = models.DateTimeField(_('Дата последнего начисления баланса'), null=True, blank=True)
-    comment = models.TextField(_('Комментарий utm'), null=True, blank=True)
+    comment = models.TextField(_('Комментарий'), null=True, blank=True)
     utm_source = models.CharField(_('Источник кампании utm'), max_length=255, null=True, blank=True)
     utm_medium = models.CharField(_('Тип трафика utm'), max_length=255, null=True, blank=True)
     utm_campaign = models.CharField(_('Название кампании utm'), max_length=255, null=True, blank=True)
