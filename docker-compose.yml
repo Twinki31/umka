@@ -5,8 +5,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: main
-      POSTGRES_USER: jack
-      POSTGRES_PASSWORD: 12345
+      POSTGRES_USER: jack4385pno3485v3c45p8
+      POSTGRES_PASSWORD: vwsjlter8v7inevr76thivwen7rtyv
     ports:
       - "5432:5432"
     volumes:
