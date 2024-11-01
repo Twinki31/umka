@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myapp.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'umka.settings')
 django.setup()
 
 User = get_user_model()
