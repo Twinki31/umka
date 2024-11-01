@@ -13,7 +13,7 @@ class UserBaseView(generics.GenericAPIView):
 
     def get_filtered_queryset(self):
         queryset = self.queryset
-        user_id = self.kwargs.get('id')
+        user_id = self.request.query_params.get('id')
         chat_id = self.request.query_params.get('chat_id')
         tg_acc = self.request.query_params.get('tg_acc')
 
