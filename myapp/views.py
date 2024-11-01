@@ -6,13 +6,36 @@ from .models import User
 from .serializers import UserSerializer
 from rest_framework.exceptions import ValidationError
 
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from myapp.authentication import HardCodedTokenAuthentication
+from rest_framework.decorators import authentication_classes, permission_classes
+
+class ProtectedView(APIView):
+    # Применяем аутентификацию и авторизацию только к этому эндпоинту
+    authentication_classes = [HardCodedTokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "Доступ разрешён, токен принят."})
+
+class PublicView(APIView):
+    # Этот эндпоинт доступен всем без аутентификации
+    permission_classes = []
+
+    def get(self, request):
+        return Response({"message": "Этот эндпоинт доступен без токена."})
+
 
 class UserBaseView(generics.GenericAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
     def get_filtered_queryset(self):
         queryset = self.queryset
+
         user_id = self.request.query_params.get('id')
         chat_id = self.request.query_params.get('chat_id')
         tg_acc = self.request.query_params.get('tg_acc')
@@ -35,20 +58,35 @@ class CreateUser(UserBaseView, generics.CreateAPIView):
     serializer_class = UserSerializer
 
 class UserDetail(UserBaseView, generics.RetrieveAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
     def get_queryset(self):
         return self.get_filtered_queryset()
 
 
-class BalanceView(UserBaseView, generics.UpdateAPIView):
-    def get(self, request, *args, **kwargs):
-        user = self.get_object()
+class BalanceView(generics.UpdateAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def get(self, request):
+        user_id = request.data.get('id')
+        chat_id = request.data.get('chat_id')
+        tg_acc = request.data.get('tg_acc')
+
+        if not user_id and not chat_id and not tg_acc:
+            raise ValidationError("Вы не передали ни одного аргумента")
+
+        if user_id:
+            user = User.objects.get(id=user_id)
+        elif chat_id:
+            user = User.objects.get(chatid=chat_id)
+        elif tg_acc:
+            user = User.objects.get(tg_acc=tg_acc)
+
         return Response({'balance': user.balance}, status=status.HTTP_200_OK)
 
-    def get_queryset(self):
-        return self.get_filtered_queryset()
-
-
 class UpdateUser(UserBaseView, generics.UpdateAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
     def patch(self, request, *args, **kwargs):
         user = self.get_object()
         key = request.data.get('key')
@@ -62,13 +100,33 @@ class UpdateUser(UserBaseView, generics.UpdateAPIView):
             return Response({'error': 'Invalid field'}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AddBalanceView(UserBaseView, generics.UpdateAPIView):
-    def patch(self, request, *args, **kwargs):
-        user = self.get_object()
-        balance = request.data.get('balance', 0)
+class AddBalanceView(generics.UpdateAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def patch(self, request):
+
+        user_id = request.data.get('id')
+        chat_id = request.data.get('chat_id')
+        tg_acc = request.data.get('tg_acc')
+
+        if not user_id and not chat_id and not tg_acc:
+            raise ValidationError("Вы не передали ни одного аргумента")
+
+        if user_id:
+            user = User.objects.get(id=user_id)
+        elif chat_id:
+            user = User.objects.get(chatid=chat_id)
+        elif tg_acc:
+            user = User.objects.get(tg_acc=tg_acc)
+
+        balance = int(request.data.get('balance', 0))
+
         user.balance += balance
         user.save()
         return Response({'balance': user.balance}, status=status.HTTP_200_OK)
 
+    
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
     def put(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)

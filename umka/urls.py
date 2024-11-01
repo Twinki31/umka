@@ -4,7 +4,6 @@ from django.urls import path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from rest_framework.authtoken import views
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -16,6 +15,7 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
+    authentication_classes=[],
     permission_classes=(permissions.AllowAny,),
 )
 
@@ -24,5 +24,4 @@ urlpatterns = [
     path('app/', include('myapp.urls')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-    path('api-token-auth/', views.obtain_auth_token, name='api-token-auth'),
 ]

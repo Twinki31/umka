@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+API_HARD_CODED_TOKEN = "mdsb346ifumhyg@lidufngyhkuv$rbd234tfktu6ghy"
 
 # Application definition
 
@@ -38,18 +39,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_authtoken',
     'drf_yasg',
     'myapp',
+
+    'rest_framework',
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'myapp.authentication.HardCodedTokenAuthentication',
+    ],
 }
 
 MIDDLEWARE = [
@@ -89,10 +88,10 @@ WSGI_APPLICATION = 'umka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres', # Имя вашей базы данных
-        'USER': 'postgres', # Имя пользователя
-        'PASSWORD': '12345', # Пароль
-        'HOST': 'localhost',
+        'NAME': 'main', # Имя вашей базы данных
+        'USER': 'jack4385pno3485v3c45p8', # Имя пользователя
+        'PASSWORD': 'vwsjlter8v7inevr76thivwen7rtyv', # Пароль
+        'HOST': 'db_postgres',
         'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
     }
 }
