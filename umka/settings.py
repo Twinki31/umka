@@ -38,10 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
+    'rest_authtoken',
     'drf_yasg',
     'myapp',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,11 +89,11 @@ WSGI_APPLICATION = 'umka.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres', # Имя вашей базы данных
-        'USER': 'postgres', # Имя пользователя
-        'PASSWORD': '12345', # Пароль
+        'NAME': 'postgres',  # Имя вашей базы данных
+        'USER': 'postgres',  # Имя пользователя
+        'PASSWORD': '12345',  # Пароль
         'HOST': 'localhost',
-        'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
+        'PORT': '5432',  # Обычно оставьте пустым для стандартного порта 5432
     }
 }
 
