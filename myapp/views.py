@@ -53,7 +53,7 @@ class UserBaseView(generics.GenericAPIView):
         return queryset
 
 
-class CreateUser(UserBaseView, generics.CreateAPIView):
+class CreateUser(UserBaseView, generics.CreateAPIView, generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -64,7 +64,7 @@ class UserDetail(UserBaseView, generics.RetrieveAPIView):
         return self.get_filtered_queryset()
 
 
-class BalanceView(generics.UpdateAPIView):
+class BalanceView(UserBaseView, generics.RetrieveAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
     def get(self, request):
@@ -84,23 +84,7 @@ class BalanceView(generics.UpdateAPIView):
 
         return Response({'balance': user.balance}, status=status.HTTP_200_OK)
 
-class UpdateUser(UserBaseView, generics.UpdateAPIView):
-    @authentication_classes([HardCodedTokenAuthentication])
-    @permission_classes([IsAuthenticated])
-    def patch(self, request, *args, **kwargs):
-        user = self.get_object()
-        key = request.data.get('key')
-        value = request.data.get('value')
-
-        if hasattr(user, key):
-            setattr(user, key, value)
-            user.save()
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid field'}, status=status.HTTP_400_BAD_REQUEST)
-
-
-class AddBalanceView(generics.UpdateAPIView):
+class BalanceUpdate(BalanceView, generics.PutpatchAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
     def patch(self, request):
@@ -130,3 +114,19 @@ class AddBalanceView(generics.UpdateAPIView):
     @permission_classes([IsAuthenticated])
     def put(self, request, *args, **kwargs):
         return self.patch(request, *args, **kwargs)
+
+class UpdateUser(UserBaseView, generics.UpdateAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def patch(self, request, *args, **kwargs):
+        user = self.get_object()
+        key = request.data.get('key')
+        value = request.data.get('value')
+
+        if hasattr(user, key):
+            setattr(user, key, value)
+            user.save()
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid field'}, status=status.HTTP_400_BAD_REQUEST)
+

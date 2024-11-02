@@ -1,3 +1,4 @@
 
 /db/postgres
 /myapp/migrations
+/myapp/__pycache__
