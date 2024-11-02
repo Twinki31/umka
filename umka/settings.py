@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--r3rrczzwk*-ws*buq!38q@kexwxx9u(urf6()e9nx%@hyxs@h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 API_HARD_CODED_TOKEN = "mdsb346ifumhyg@lidufngyhkuv$rbd234tfktu6ghy"
 
@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'main', # Имя вашей базы данных
         'USER': 'jack4385pno3485v3c45p8', # Имя пользователя
         'PASSWORD': 'vwsjlter8v7inevr76thivwen7rtyv', # Пароль
-        'HOST': 'localhost', #
+        'HOST': 'db_postgres', #
         'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
     }
 }
@@ -132,6 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "umka" / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
