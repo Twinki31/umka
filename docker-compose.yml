@@ -14,18 +14,18 @@ services:
     networks:
       - main_network
 
-  backend_api:
-    build: .
-    container_name: backend_api
-    ports:
-      - "8000:8000"
-    environment:
-      - HOST=0.0.0.0
-      - PORT=8000
-    depends_on:
-      - db_postgres
-    networks:
-      - main_network
+  # backend_api:
+  #   build: .
+  #   container_name: backend_api
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     - HOST=0.0.0.0
+  #     - PORT=8000
+  #   depends_on:
+  #     - db_postgres
+  #   networks:
+  #     - main_network
 
 volumes:
   postgres_data:

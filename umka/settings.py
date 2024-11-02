@@ -91,7 +91,7 @@ DATABASES = {
         'NAME': 'main', # Имя вашей базы данных
         'USER': 'jack4385pno3485v3c45p8', # Имя пользователя
         'PASSWORD': 'vwsjlter8v7inevr76thivwen7rtyv', # Пароль
-        'HOST': 'db_postgres',
+        'HOST': 'localhost', #
         'PORT': '5432', # Обычно оставьте пустым для стандартного порта 5432
     }
 }

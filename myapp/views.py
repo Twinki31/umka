@@ -52,19 +52,76 @@ class UserBaseView(generics.GenericAPIView):
 
         return queryset
 
-
-class CreateUser(UserBaseView, generics.CreateAPIView, generics.ListAPIView):
+class CreateUser(UserBaseView, generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
-class UserDetail(UserBaseView, generics.RetrieveAPIView):
+
+class UserDetail(generics.RetrieveAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
-    def get_queryset(self):
-        return self.get_filtered_queryset()
+    def get(self, request):
+        user_id = request.data.get('id')
+        chat_id = request.data.get('chat_id')
+        tg_acc = request.data.get('tg_acc')
+
+        if not user_id and not chat_id and not tg_acc:
+            raise ValidationError("Вы не передали ни одного аргумента")
+
+        if user_id:
+            user = User.objects.get(id=user_id)
+        elif chat_id:
+            user = User.objects.get(chatid=chat_id)
+        elif tg_acc:
+            user = User.objects.get(tg_acc=tg_acc)
+
+        return Response({'username': user.username,
+                         'tg_acc': user.tg_acc,
+                         'chatid': user.chatid,
+                         'balance': user.balance,
+                         'meeting_count': user.meeting_count,
+                         }, status=status.HTTP_200_OK)
+
+    
+class UserDetailUpdate(generics.UpdateAPIView):
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def patch(self, request, *args, **kwargs):
+
+        user_id = request.data.get('id')
+        chat_id = request.data.get('chat_id')
+        tg_acc = request.data.get('tg_acc')
+        key = request.data.get('key')
+        value = request.data.get('value')
 
 
-class BalanceView(UserBaseView, generics.RetrieveAPIView):
+        if not user_id and not chat_id and not tg_acc:
+            raise ValidationError("Вы не передали ни одного аргумента по пользователю")
+        
+        if not key or not value:
+            raise ValidationError("Вы не передали ни одного аргумента")
+
+        if user_id:
+            user = User.objects.get(id=user_id)
+        elif chat_id:
+            user = User.objects.get(chatid=chat_id)
+        elif tg_acc:
+            user = User.objects.get(tg_acc=tg_acc)
+
+
+        if hasattr(user, key):
+            setattr(user, key, value)
+            user.save()
+            return Response({'success': True}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Invalid field'}, status=status.HTTP_400_BAD_REQUEST)
+
+    @authentication_classes([HardCodedTokenAuthentication])
+    @permission_classes([IsAuthenticated])
+    def put(self, request, *args, **kwargs):
+        return Response({'error': 'Method PUT is not allowed'}, status=status.HTTP_405_METHOD_NOT_ALLOWED) # TODO: remove put decloration
+
+class BalanceView(UserBaseView, generics.UpdateAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
     def get(self, request):
@@ -84,7 +141,6 @@ class BalanceView(UserBaseView, generics.RetrieveAPIView):
 
         return Response({'balance': user.balance}, status=status.HTTP_200_OK)
 
-class BalanceUpdate(BalanceView, generics.PutpatchAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
     def patch(self, request):
@@ -113,20 +169,22 @@ class BalanceUpdate(BalanceView, generics.PutpatchAPIView):
     @authentication_classes([HardCodedTokenAuthentication])
     @permission_classes([IsAuthenticated])
     def put(self, request, *args, **kwargs):
-        return self.patch(request, *args, **kwargs)
+        user_id = request.data.get('id')
+        chat_id = request.data.get('chat_id')
+        tg_acc = request.data.get('tg_acc')
 
-class UpdateUser(UserBaseView, generics.UpdateAPIView):
-    @authentication_classes([HardCodedTokenAuthentication])
-    @permission_classes([IsAuthenticated])
-    def patch(self, request, *args, **kwargs):
-        user = self.get_object()
-        key = request.data.get('key')
-        value = request.data.get('value')
+        if not user_id and not chat_id and not tg_acc:
+            raise ValidationError("Вы не передали ни одного аргумента")
 
-        if hasattr(user, key):
-            setattr(user, key, value)
-            user.save()
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        else:
-            return Response({'error': 'Invalid field'}, status=status.HTTP_400_BAD_REQUEST)
+        if user_id:
+            user = User.objects.get(id=user_id)
+        elif chat_id:
+            user = User.objects.get(chatid=chat_id)
+        elif tg_acc:
+            user = User.objects.get(tg_acc=tg_acc)
 
+        balance = int(request.data.get('balance', 0))
+
+        user.balance = balance
+        user.save()
+        return Response({'balance': user.balance}, status=status.HTTP_200_OK)
