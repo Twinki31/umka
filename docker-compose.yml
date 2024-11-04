@@ -7,10 +7,8 @@ services:
       POSTGRES_DB: main
       POSTGRES_USER: jack4385pno3485v3c45p8
       POSTGRES_PASSWORD: vwsjlter8v7inevr76thivwen7rtyv
-    ports:
-      - "5432:5432"
     volumes:
-      - ./db/postgres:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - main_network
 
