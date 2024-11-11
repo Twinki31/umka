@@ -5,3 +5,4 @@
 /venv
 /umka/static
 /umka/__pycache__
+umka/settings.py
